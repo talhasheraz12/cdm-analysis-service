@@ -232,7 +232,7 @@ def _device_report(d, sub, colors, outdir, idx):
     ax.set_title(f"{d} — Hourly Usage Pattern")
     ax.legend()
     finish_chart(fig, ax, subtitle="Declined transactions highlighted in red")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     safe_name = "".join(c if c.isalnum() else "_" for c in d)
     fig_path = os.path.join(outdir, f"device_{idx:02d}_{safe_name}_hourly.png")
     plt.savefig(fig_path)
@@ -245,7 +245,7 @@ def _device_report(d, sub, colors, outdir, idx):
     ax.set_ylabel("Number of Deposits")
     ax.tick_params(axis='x', rotation=30)
     finish_chart(fig, ax)
-    plt.tight_layout(rect=[0, 0.02, 1, 0.96])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.96, wspace=0.3, hspace=0.45)
     fig_path2 = os.path.join(outdir, f"device_{idx:02d}_{safe_name}_dow.png")
     plt.savefig(fig_path2)
     plt.close()
@@ -292,7 +292,7 @@ def analyze(df, outdir):
     ax.set_title("All Rows in Raw File by Step Type")
     ax.set_xlabel("Row Count")
     finish_chart(fig, ax, subtitle="Highlighted bar = actual deposits counted in this analysis")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.22, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "00_data_overview_row_breakdown.png"))
     plt.close()
 
@@ -323,7 +323,7 @@ def analyze(df, outdir):
     axes[1].bar_label(bars2, labels=[fmt_pkr(v) for v in usage["total_amount"]], padding=3)
     axes[1].tick_params(axis='x', rotation=15)
     finish_chart(fig, axes, subtitle="Successful transactions only (declined excluded from value totals)")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "01_device_usage.png"))
     plt.close()
 
@@ -355,7 +355,7 @@ def analyze(df, outdir):
     ax.bar_label(bars, fmt="%.2f%%", padding=3)
     ax.tick_params(axis='x', rotation=15)
     finish_chart(fig, ax)
-    plt.tight_layout(rect=[0, 0.02, 1, 0.96])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.96, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "07_decline_rate_by_device.png"))
     plt.close()
 
@@ -365,7 +365,7 @@ def analyze(df, outdir):
         ax.set_title("Decline Reasons (All Devices)")
         ax.set_xlabel("Number of Declined Transactions")
         finish_chart(fig, ax)
-        plt.tight_layout(rect=[0, 0.02, 1, 0.96])
+        plt.subplots_adjust(left=0.32, right=0.97, bottom=0.02, top=0.96, wspace=0.3, hspace=0.45)
         plt.savefig(os.path.join(outdir, "08_decline_reasons.png"))
         plt.close()
 
@@ -386,7 +386,7 @@ def analyze(df, outdir):
     ax.set_title("Overall Busiest Times of Day")
     ax.legend()
     finish_chart(fig, ax, subtitle="All devices combined · declined transactions highlighted in red")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "02_busiest_hours_overall.png"))
     plt.close()
 
@@ -404,7 +404,7 @@ def analyze(df, outdir):
     ax.set_title("Hourly Usage Pattern by Device")
     ax.legend()
     finish_chart(fig, ax, subtitle="Peak and ramp-up behavior · all attempts (successful + declined)")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "03_hourly_pattern_by_device.png"))
     plt.close()
 
@@ -426,7 +426,7 @@ def analyze(df, outdir):
     axes[1].bar_label(bars, labels=[fmt_pkr(v) for v in dow_amount.values], padding=3, fontsize=8)
     axes[1].tick_params(axis='x', rotation=30)
     finish_chart(fig, axes, subtitle="All attempts shown on the left; value totals reflect successful deposits only")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "04_day_of_week_pattern.png"))
     plt.close()
 
@@ -445,7 +445,7 @@ def analyze(df, outdir):
     fig.colorbar(im, ax=ax, label="Number of Deposits")
     fig.text(0.5, 0.955, "All devices combined · all attempts", ha="center", fontsize=9.5, color="#666666", style="italic")
     fig.text(0.99, 0.01, f"Generated {pd.Timestamp.now().strftime('%d %b %Y')} · CDM Usage Analysis", ha="right", va="bottom", fontsize=7.5, color="#999999")
-    plt.tight_layout(rect=[0, 0.02, 1, 0.94])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "05_heatmap_dow_hour.png"))
     plt.close()
 
@@ -465,7 +465,7 @@ def analyze(df, outdir):
             spine.set_visible(False)
         fig.colorbar(im, ax=ax)
     fig.text(0.99, 0.005, f"Generated {pd.Timestamp.now().strftime('%d %b %Y')} · CDM Usage Analysis", ha="right", va="bottom", fontsize=7.5, color="#999999")
-    plt.tight_layout(rect=[0, 0.015, 1, 1])
+    plt.subplots_adjust(left=0.08, right=0.97, bottom=0.015, top=1, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "06_heatmap_per_device.png"))
     plt.close()
 
