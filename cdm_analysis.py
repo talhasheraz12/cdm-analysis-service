@@ -25,6 +25,7 @@ USAGE (Google Colab): see CDM_Automated_Analysis.ipynb
 
 import sys
 import os
+import gc
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
@@ -53,7 +54,7 @@ plt.rcParams.update({
     "ytick.color": "#333333",
     "legend.frameon": False,
     "figure.dpi": 150,
-    "savefig.dpi": 300,
+    "savefig.dpi": 180,
 })
 
 # Professional, muted palette (navy / slate / amber family)
@@ -237,6 +238,7 @@ def _device_report(d, sub, colors, outdir, idx):
     fig_path = os.path.join(outdir, f"device_{idx:02d}_{safe_name}_hourly.png")
     plt.savefig(fig_path)
     plt.close()
+    gc.collect()
 
     # Chart: day-of-week for this device
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -249,6 +251,7 @@ def _device_report(d, sub, colors, outdir, idx):
     fig_path2 = os.path.join(outdir, f"device_{idx:02d}_{safe_name}_dow.png")
     plt.savefig(fig_path2)
     plt.close()
+    gc.collect()
 
     return lines, {
         "total": total, "successful": successful, "declined": declined,
@@ -295,6 +298,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.22, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "00_data_overview_row_breakdown.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 1. DEVICE USAGE SUMMARY (successful transactions for value) ----------
     successful = deposits[~deposits["declined"]]
@@ -326,6 +330,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "01_device_usage.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 2. DECLINED TRANSACTIONS — OVERALL ----------
     total_all = len(deposits)
@@ -358,6 +363,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.96, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "07_decline_rate_by_device.png"))
     plt.close()
+    gc.collect()
 
     if len(reason_counts):
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -368,6 +374,7 @@ def analyze(df, outdir):
         plt.subplots_adjust(left=0.32, right=0.97, bottom=0.02, top=0.96, wspace=0.3, hspace=0.45)
         plt.savefig(os.path.join(outdir, "08_decline_reasons.png"))
         plt.close()
+        gc.collect()
 
     # ---------- 3. BUSIEST TIME OF DAY (overall, all attempts incl. declines) ----------
     hourly_all = _hourly_series(deposits)
@@ -389,6 +396,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "02_busiest_hours_overall.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 4. HOURLY LOAD CURVE PER DEVICE (comparison) ----------
     hourly_by_device = deposits.pivot_table(
@@ -407,6 +415,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "03_hourly_pattern_by_device.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 5. DAY OF WEEK PATTERN (overall) ----------
     dow_counts = deposits["dow"].value_counts().reindex(DOW_ORDER, fill_value=0)
@@ -429,6 +438,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "04_day_of_week_pattern.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 6. HEATMAP: Hour x Day-of-week (overall) ----------
     heat = deposits.pivot_table(index="dow", columns="hour", values="Amount", aggfunc="count", fill_value=0)
@@ -448,9 +458,10 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.02, top=0.94, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "05_heatmap_dow_hour.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 7. Per-device heatmaps (combined view) ----------
-    fig, axes = plt.subplots(len(devices), 1, figsize=(14, 4 * len(devices)))
+    fig, axes = plt.subplots(len(devices), 1, figsize=(12, 3.3 * len(devices)))
     if len(devices) == 1:
         axes = [axes]
     for ax, d in zip(axes, devices):
@@ -468,6 +479,7 @@ def analyze(df, outdir):
     plt.subplots_adjust(left=0.08, right=0.97, bottom=0.015, top=1, wspace=0.3, hspace=0.45)
     plt.savefig(os.path.join(outdir, "06_heatmap_per_device.png"))
     plt.close()
+    gc.collect()
 
     # ---------- 8. INDIVIDUAL PER-DEVICE REPORTS ----------
     summary_lines.append("=== INDIVIDUAL DEVICE REPORTS ===")
